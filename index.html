@@ -1,42 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Presentación</title>
-  <style>
-    body {
-      /* Color de fondo */
-      background-color: #000;
-      /* Patrón de círculos blancos */
-      background-image:
-        radial-gradient(circle, #fff 5px, transparent 5px),
-        radial-gradient(circle, #fff 5px, transparent 5px);
-      /* Desplazamos la segunda capa para que los círculos queden en diagonal */
-      background-position: 0 0, 50px 50px;
-      /* Repetimos cada 100×100px */
-      background-size: 100px 100px;
-
-      /* Resto de estilos */
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .logo {
-      font-size: 80px;
-      margin-bottom: 20px;
-    }
-    h1 {
-      font-size: 36px;
-    }
-  </style>
-</head>
+<html>
+<head><title>Login</title></head>
 <body>
-  <div class="logo">✊</div>
-  <h1>Ing.informaticos  Juan, Mike, Cristian</h1>
+  <h2>Iniciar Sesión</h2>
+  <input type="email" id="email" placeholder="Correo" />
+  <input type="password" id="password" placeholder="Contraseña" />
+  <button onclick="login()">Entrar</button>
+  <p>No tienes cuenta? <a href="register.html">Regístrate</a></p>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
