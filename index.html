@@ -5,7 +5,18 @@
   <title>Presentación</title>
   <style>
     body {
+      /* Color de fondo */
       background-color: #000;
+      /* Patrón de círculos blancos */
+      background-image:
+        radial-gradient(circle, #fff 5px, transparent 5px),
+        radial-gradient(circle, #fff 5px, transparent 5px);
+      /* Desplazamos la segunda capa para que los círculos queden en diagonal */
+      background-position: 0 0, 50px 50px;
+      /* Repetimos cada 100×100px */
+      background-size: 100px 100px;
+
+      /* Resto de estilos */
       color: #fff;
       font-family: 'Segoe UI', sans-serif;
       display: flex;
@@ -26,6 +37,6 @@
 </head>
 <body>
   <div class="logo">✊</div>
-  <h1>Juan, Ing. Informático</h1>
+  <h1>Ing.informaticos  Juan, Mike, Cristian</h1>
 </body>
 </html>
