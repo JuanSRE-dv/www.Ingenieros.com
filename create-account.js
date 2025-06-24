@@ -1,6 +1,9 @@
-// Import Firebase SDKs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
 // Configuración Firebase
 const firebaseConfig = {
@@ -16,19 +19,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Registrar usuario
-document.getElementById("submit").addEventListener("click", function(event) {
-  event.preventDefault();
-
+// Función para obtener los datos del formulario
+function getCredentials() {
   const email = document.getElementById("Email").value;
   const password = document.getElementById("password").value;
+  return { email, password };
+}
+
+// Registro
+document.getElementById("registerBtn").addEventListener("click", function (e) {
+  e.preventDefault();
+  const { email, password } = getCredentials();
 
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      const user = userCredential.user;
-      alert("Usuario registrado con éxito: " + user.email);
+      alert("Registrado exitosamente: " + userCredential.user.email);
     })
     .catch((error) => {
-      alert("Error: " + error.message);
+      alert("Error de registro: " + error.message);
+    });
+});
+
+// Login
+document.getElementById("loginBtn").addEventListener("click", function (e) {
+  e.preventDefault();
+  const { email, password } = getCredentials();
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      alert("Sesión iniciada como: " + userCredential.user.email);
+      // window.location.href = "dashboard.html";
+    })
+    .catch((error) => {
+      alert("Error al iniciar sesión: " + error.message);
     });
 });
