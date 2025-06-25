@@ -1,21 +1,188 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Autenticación Firebase</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      color: white;
+    }
+
+    .circle, .triangle {
+      position: absolute;
+      z-index: 0;
+    }
+
+    .circle {
+      width: 120px;
+      height: 120px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      top: 15%;
+      left: 8%;
+      animation: floatCircle 8s ease-in-out infinite;
+    }
+
+    .triangle {
+      width: 0;
+      height: 0;
+      border-left: 60px solid transparent;
+      border-right: 60px solid transparent;
+      border-bottom: 100px solid rgba(255, 255, 255, 0.05);
+      bottom: 10%;
+      right: 8%;
+      animation: rotateTriangle 12s linear infinite;
+    }
+
+    @keyframes floatCircle {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(40px); }
+    }
+
+    @keyframes rotateTriangle {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .login-box {
+      background-color: rgba(255, 255, 255, 0.08);
+      padding: 40px;
+      border-radius: 15px;
+      z-index: 1;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 360px;
+    }
+
+    .login-box h2 {
+      margin-bottom: 15px;
+      color: white;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: white;
+      color: black;
+      font-weight: bold;
+    }
+
+    .status {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    #logoutBtn {
+      background-color: crimson;
+      color: white;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h2>Registro / Login</h2>
-  <form>
-    <input type="email" id="Email" placeholder="Enter Your Email" required />
-    <br>
-    <input type="password" id="password" placeholder="Enter Your Password" required />
-    <br><br>
-    <button id="registerBtn">Registrarse</button>
-    <button id="loginBtn">Iniciar Sesión</button>
-  </form>
+  <div class="circle"></div>
+  <div class="triangle"></div>
 
-  <script type="module" src="create-account.js" defer></script>
+  <div class="login-box">
+    <h2>Bienvenido</h2>
+    <form id="authForm">
+      <input type="email" id="Email" placeholder="Correo electrónico" required />
+      <input type="password" id="password" placeholder="Contraseña" required />
+      <button id="registerBtn" type="button">Registrarse</button>
+      <button id="loginBtn" type="button">Iniciar Sesión</button>
+      <button id="logoutBtn" type="button">Cerrar Sesión</button>
+    </form>
+    <div class="status" id="statusText">Estado: No autenticado</div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDiKGQC8bmGtlG2unuYoHiii9pSp441V-k",
+      authDomain: "login-3a580.firebaseapp.com",
+      projectId: "login-3a580",
+      storageBucket: "login-3a580.appspot.com",
+      messagingSenderId: "71976587120",
+      appId: "1:71976587120:web:1afdc24c1852ee843589b5",
+      measurementId: "G-K7DV15JRW6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const statusText = document.getElementById("statusText");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    // Registro
+    document.getElementById("registerBtn").addEventListener("click", () => {
+      const email = document.getElementById("Email").value;
+      const password = document.getElementById("password").value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCred) => {
+          alert("Registro exitoso");
+        })
+        .catch((err) => alert("Error: " + err.message));
+    });
+
+    // Login
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      const email = document.getElementById("Email").value;
+      const password = document.getElementById("password").value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCred) => {
+          alert("Sesión iniciada");
+        })
+        .catch((err) => alert("Error: " + err.message));
+    });
+
+    // Logout
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth);
+    });
+
+    // Estado actual
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        statusText.textContent = `Sesión activa: ${user.email}`;
+        logoutBtn.style.display = "block";
+      } else {
+        statusText.textContent = "Estado: No autenticado";
+        logoutBtn.style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
