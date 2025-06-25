@@ -48,7 +48,7 @@ document.getElementById("loginBtn").addEventListener("click", function (e) {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       alert("Sesión iniciada como: " + userCredential.user.email);
-      window.location.href = "dashboard.html";
+      window.location.href = "home.html";
     })
     .catch((error) => {
       alert("Error al iniciar sesión: " + error.message);
